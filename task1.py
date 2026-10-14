@@ -5,55 +5,46 @@
 import os
 import json
 
+#file loader funktion for json file 
+def load_json(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+          return json.load(file)
 
-#needs to return list of rejected files 
+def list_registerd_vessels():
+    directory = "dataset/vessels"
+    valid_vessels = []
+    skipped_count = 0
+    requierd_fields = ["vessel_id", "name", "imo", "capacity_teu"]
 
-def load_json(file_path,read):
-     with open(file_path,read, encoding="utf-8") as file:
-        data = json.load(file)
-        return data
+    if not os.path.exists(directory):
+         print(f"Error: Directory {directory} does not exist.")
+    else:
+         for filename in os.listdir(directory):
+                if not filename.endswith(".json"):
+                   continue
+                file_path = os.path.join(directory, filename)
 
-directory = "dataset/vessels"
-valid_vessels = []
-invalid_vessels = []
+                try:
+                    data = load_json(file_path) 
+                except (json.JSONDecodeError, Exception) as e:
+                     skipped_count +=1
+                     continue
+                if not isinstance(data, dict) or any (field not in data for field in requierd_fields):
+                    skipped_count += 1
+                    continue
+                valid_vessels.append(data)
+    valid_vessels.sort(key=lambda v: str(v["name"]).lower())
 
-if not os.path.exists(directory):
-    print(f"Error: Directory '{directory}' does not exist.")
-else:
-      for filename in os.listdir(directory):
-            if not filename.endswith(".json"):
-                  continue
+    #print output
+    print("registered Vessels:")
+    for vessel in valid_vessels:
+        raw_capacity = vessel['capacity_teu']
+        if isinstance(raw_capacity, str):
+            capacity = int(raw_capacity.replace(",", ""))
+        else:
+            capacity = int(raw_capacity)
+        capacity = capacity/1000
+        print(f"- {vessel['name']} | IMO {vessel['imo']} | {capacity} TEU ")
+    print(f"Skipped vessel files: {skipped_count}")
 
-            file_path = os.path.join(directory, filename)
-      
-            try:
-                data = load_json(file_path,"r")
-            except (json.JSONDecodeError, Exception) as e:
-                print(f"Malformed file skipped ({filename}): {e}")
-                continue        
-
-            requierd_fields = ["vessel_id", "name", "imo", "capacity_teu"]
-            missing_fields = [field for field in requierd_fields if field not in data]
-
-            invalid_vessels.append(data) if hasattr(invalid_vessels, 'appended') else invalid_vessels.append(data)
-            valid_vessels.appended(data) if hasattr(valid_vessels, 'appended') else valid_vessels.append(data)
-# Sort valid vessels case-insensitively by name
-valid_vessels.sort(key=lambda v: str(v["name"]).lower())
-
-# Print one line per valid vessel
-print("\n--- Valid Vessels ---")
-for vessel in valid_vessels:
-    print(f"ID: {vessel['vessel_id']} | Name: {vessel['name']} | IMO: {vessel['imo']} | TEU: {vessel['capacity_teu']}")
-print("n\--- Invalid Vessels ---")
-for invalid in invalid_vessels:
-     print(f"ID: {vessel['vessel_id']} | Name: {vessel['name']} | IMO: {vessel['imo']} | TEU: {vessel['capacity_teu']}")
-
-
-        
-
-
-           
-
-
-
-     
+list_registerd_vessels()
