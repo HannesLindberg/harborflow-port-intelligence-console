@@ -1,5 +1,8 @@
 """HarborFlow Assignment 2 starter entry point."""
 import math
+import json
+import data_access
+import os
 
 def get_number(prompt, error_message="Invalid input", cast=float, min_value=0, max_value=math.inf):
     """Keep asking until the user enters something that converts with `cast`
@@ -18,6 +21,46 @@ def get_number(prompt, error_message="Invalid input", cast=float, min_value=0, m
             continue
 
         return value
+
+    
+#task 1 lists all valid vessels vessels folder
+def list_registerd_vessels():
+    directory = "dataset/vessels"
+    valid_vessels = []
+    skipped_count = 0
+    requierd_fields = ["vessel_id", "name", "imo", "capacity_teu"]
+
+    if not os.path.exists(directory):
+         print(f"Error: Directory {directory} does not exist.")
+    else:
+         for filename in os.listdir(directory):
+                if not filename.endswith(".json"):
+                   continue
+                file_path = os.path.join(directory, filename)
+
+                try:
+                    data = data_access.load_json(file_path) 
+                except (json.JSONDecodeError, Exception) as e:
+                     skipped_count +=1
+                     continue
+                if not isinstance(data, dict) or any (field not in data for field in requierd_fields):
+                    skipped_count += 1
+                    continue
+                valid_vessels.append(data)
+    valid_vessels.sort(key=lambda v: str(v["name"]).lower())
+
+    #print output
+    print("registered Vessels:")
+    for vessel in valid_vessels:
+        raw_capacity = vessel['capacity_teu']
+        if isinstance(raw_capacity, str):
+            capacity = int(raw_capacity.replace(",", ""))
+        else:
+            capacity = int(raw_capacity)
+        capacity = capacity/1000
+        print(f"- {vessel['name']} | IMO {vessel['imo']} | {capacity} TEU ")
+    print(f"Skipped vessel files: {skipped_count}")
+
     
 def main():
     """Start the terminal based application and prompt the user with options for calling other programs or closing the console.
