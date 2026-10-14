@@ -1,7 +1,4 @@
-# Read every .json file in dataset/vessels. Validate that vessel_id, name, imo and capacity_teu
-# exist. Sort valid vessels by name, case-insensitively, and print one line per vessel. A
-# malformed file or a record missing a required field must be reported and skipped without
-# preventing valid vessels from appearing
+
 import os
 import json
 
