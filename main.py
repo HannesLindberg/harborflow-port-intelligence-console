@@ -185,6 +185,9 @@ def save_sanitized_report(incident_id, text):
         file.write(text)
 
     print(f"Sanitized report saved: {path}")
+
+
+    
 def main():
     """Start the terminal based application and prompt the user with options for calling other programs or closing the console.
     The cases are where the programs will be called. its based on the programs id.
