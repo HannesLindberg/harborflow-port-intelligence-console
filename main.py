@@ -152,27 +152,26 @@ def Inspect_a_vessel_manifest(valid_vessels):
                 shipment_path = os.path.join(shipments_folder, filename)
                 try:
                     ship_data = data_access.load_json(shipment_path)
-                    ship_id = ship_data("shipment_id")
+                    ship_id = ship_data.get("shipment_id")
                     if ship_id:
-                        shipment_dict[ship_id] = ship_id
+                        shipment_dict[ship_id] = ship_data
                 except Exception:
                     pass
     formatted_date = arrival_date.strftime("%d %B %Y")
     print(f"\nManifest for {matched_vessel.get("name")} | Call {call_id} | {formatted_date}")
 
+    shipment_id = manifest_data.get("shipment_ids",[])
     declared_shipment = len(manifest_data)
     resolved_weight = 0.0
     missing_records = 0
 
-    for index, item in enumerate(manifest_data, start=1):
-        shipment_id = item.get("shipment_id")
-
+    for index, shipment_id in enumerate(shipment_id, start=1):
         if shipment_id in shipment_dict:
             ship = shipment_dict[shipment_id]
-            company = ship.get("company_name","")
+            company = ship.get("customer","")
 
             try:
-                weight = float(ship.get("weight",0.0))
+                weight = float(ship.get("weight_kg",0.0))
             except ValueError:
                 weight = 0.0
             resolved_weight += weight
