@@ -7,8 +7,10 @@ Python version tested:
 
 Team members and concrete contributions
 ---------------------------------------
-Name:
+Name: Hannes Lindberg
 Contribution:
+- GitHub initiation
+- Task 0
 
 Name:
 Contribution:
