@@ -130,6 +130,8 @@ def print_calls_in(month, calls):
         for arrival, vessel_name, port_code, call_id in calls:
             print(f"- {arrival.strftime("%d %B %Y")} | {vessel_name} | {port_code} | {call_id}")
 
+
+              
 #Task 6
 def load_incidents():
     incidents = []
@@ -209,7 +211,8 @@ def main():
 
         match program_id:
             case 1:
-                pass
+                print("Console closed. Dispatch data remains safe.")
+                run = False
             case 2:
                 pass
             case 3:
@@ -240,8 +243,7 @@ def main():
             case 9:
                 pass
             case 10:
-                print("Console closed. Dispatch data remains safe.")
-                run = False
+                pass
                 
 if __name__ == "__main__":
     main()
