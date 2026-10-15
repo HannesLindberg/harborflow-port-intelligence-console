@@ -111,6 +111,7 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
     port_calls_path = "dataset/port_calls.csv"
     if not os.path.exists(port_calls_path):
         print(f"Error: Directory {port_calls_path} does not exist.")
+        return
 
     try:
         port_calls_list = data_access.load_csv(port_calls_path)
@@ -131,6 +132,7 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
                 continue
     if not matching_calls:
         print("No upcoming port calls found")
+        return
 
     #sort calls by (earliest first so by date)
     matching_calls.sort()
@@ -162,7 +164,7 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
                         shipment_dict[ship_id] = ship_id
                 except Exception:
                     pass
-    formatted_date = arrival_date.strftime("%d %B % Y")
+    formatted_date = arrival_date.strftime("%d %B %Y")
     print(f"\nManifest for {matched_vessel.get("name")} | Call {call_id} | {formatted_date}")
 
     declared_shipment = len(manifest_data)
@@ -183,7 +185,7 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
             resolved_weight += weight
 
             cargo_type = ship.get("cargo_type")
-            if not cargo_type or cargo_type.strip == "":
+            if not cargo_type or cargo_type.strip == (""):
                 cargo_type = "NOT PROVIDED"
             else:
                 cargo_type = cargo_type.upper()
@@ -192,9 +194,9 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
             print(f"{index}. {shipment_id} | MISSING RECORD")
             missing_records +=1
 
-        print(f"\nDeclared shipment: {declared_shipment}")
-        print(f"\nResolved weight: {resolved_weight:.2f} kg")
-        print(f"\nMissing shipment records: {missing_records}")
+    print(f"\nDeclared shipment: {declared_shipment}")
+    print(f"\nResolved weight: {resolved_weight:.2f} kg")
+    print(f"\nMissing shipment records: {missing_records}")
 
 
 

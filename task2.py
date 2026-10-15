@@ -30,7 +30,7 @@ def find_vessel(vessel_name, valid_vessels):
     return None
 
 
-def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
+def Inspect_a_vessel_manifest(valid_vessels):
     print("Registered Vessels:")
     for vessel in valid_vessels:
         print(vessel)
@@ -138,5 +138,7 @@ def Inspect_a_vessel_manifest(valid_vessels, skipped_count):
         print(f"\nDeclared shipment: {declared_shipment}")
         print(f"\nResolved weight: {resolved_weight:.2f} kg")
         print(f"\nMissing shipment records: {missing_records}")
+
+
 
 
