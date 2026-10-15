@@ -64,7 +64,7 @@ def list_registerd_vessels():
         capacity = capacity/1000
         print(f"- {vessel['name']} | IMO {vessel['imo']} | {capacity} TEU ")
     print(f"Skipped vessel files: {skipped_count}")
-
+    return valid_vessels
 
 #task 2 helper funktion
 def validate_date(date_time):
@@ -130,15 +130,15 @@ def Inspect_a_vessel_manifest(valid_vessels):
     #sort calls by (earliest first so by date)
     matching_calls.sort()
     earliest_call = matching_calls[0][2]
-    call_id = earliest_call["call_id"]
+    call_id = earliest_call["call_id"].lower()
     arrival_date = datetime.date.fromisoformat(earliest_call["arrival_date"])
 
-    manifest_path = (f"dataset/manifest/{call_id}.csv")
+    manifest_path = (f"dataset/manifests/{call_id}.json")
     if not os.path.exists(manifest_path):
             print(f"Error: Directory {manifest_path} does not exist.")
             return
     try:
-        manifest_data = data_access.load_csv(manifest_path)
+        manifest_data = data_access.load_json(manifest_path)
     except Exception:
         print("Manifest unavalible.")
         return
@@ -337,9 +337,9 @@ def main():
 
         match program_id:
             case 1:
-                pass
+                valid_vessels = list_registerd_vessels()
             case 2:
-                pass
+                Inspect_a_vessel_manifest(valid_vessels)
             case 3:
                 identify_priority_cargo()
             case 4:
