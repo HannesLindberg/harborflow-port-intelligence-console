@@ -183,6 +183,8 @@ def save_sanitized_report(incident_id, text):
         file.write(text)
 
     print(f"Sanitized report saved: {path}")
+
+
     
 def main():
     """Start the terminal based application and prompt the user with options for calling other programs or closing the console.
@@ -211,7 +213,7 @@ def main():
             case 2:
                 pass
             case 3:
-                identify_priority_cargo()
+                pass
             case 4:
                 pass
             case 5:
@@ -240,57 +242,6 @@ def main():
             case 10:
                 print("Console closed. Dispatch data remains safe.")
                 run = False
-
-def identify_priority_cargo():
-    """Takes a port call and identifies the priority shipment catefories for each shipment"""
-
-    call_id = input("Call id: ").strip().lower()
-
-    calls = load_csv("dataset/port_calls.csv")
-    call = next((c for c in calls if c["call_id"].strip().lower() == call_id), None)
-
-    if call is None:
-        print("Port call not found")
-        return
-
-    count = get_count(call["call_id"])
-    print(f"Category totals: CONTROLLED={count["CONTROLLED"]}, COLD CHAIN={count["COLD CHAIN"]}, EXPEDITE={count["EXPEDITE"]}, STANDARD={count["STANDARD"]}")
-
-def get_count(call_id):
-    """Takes a call id, prints shippment id, priority category and reason for each attached shipment.
-    ARGUMENTS:
-    call_id (string): the port call id
-    RETURNS:
-    count (dict): the number of each category for the call id
-    """
-    count = {"CONTROLLED": 0, "COLD CHAIN": 0, "EXPEDITE": 0, "STANDARD": 0}
-    manifest = data_access.load_json(f"dataset/manifests/{call_id}.json")
-    for shipment_id in manifest["shipment_ids"]:
-        file_name = "shipment-" + shipment_id[-4:]
-        shipment = data_access.load_json(f"dataset/shipments/{file_name}.json")
-        category, reason = classify_shipment(shipment)
-        print(f"{shipment_id.upper()} | {category} | {reason}")
-
-        count[category] += 1
-    return count
-
-def classify_shipment(shipment):
-    """Classifys the shipments priority and reason'
-    ARGUMENTS:
-    shipment (dict)
-    RETURNS:
-    category (string)
-    reason (string)
-    """
-    if shipment.get("hazardous", False):
-        return "CONTROLLED", "hazardous cargo"
-    if shipment.get("temperature_controlled", False):
-        return "COLD CHAIN", "temperature controlled"
-    if shipment["priority"] == "EXPRESS":
-        return "EXPEDITE", "express service"
-    if shipment["weight_kg"] >= 5000:
-        return "EXPEDITE", "heavy cargo"
-    return "STANDARD", "standard handling"
-
+                
 if __name__ == "__main__":
     main()
