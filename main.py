@@ -237,7 +237,7 @@ def find_port_calls_by_month(month, vessel_names):
     calls = []
     for row in port_calls:
         try:
-            arrival = date.fromisoformat(row["arrival_date"])
+            arrival = datetime.date.fromisoformat(row["arrival_date"])
             if arrival.month == month:
                 if row["vessel_id"] in vessel_names:
                     call = (arrival, vessel_names[row["vessel_id"]], row["port_code"], row["call_id"])
