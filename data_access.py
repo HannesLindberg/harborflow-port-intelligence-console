@@ -4,6 +4,7 @@ Create reusable JSON and CSV loaders here. Do not hard-code sample records.
 """
 import json
 import csv
+from pathlib import Path
 
 
 #file loader funktion for json file 
@@ -20,4 +21,24 @@ def load_csv(file_path):
         for row in csv_reader:
             data_list.append(dict(row))
     return data_list
-            
+
+
+
+
+def find_manifest(call_id):
+    for path in Path("dataset/manifests").glob("*.json"):
+        try: 
+            data = load_json(path)
+        except json.JSONDecodeError:
+            continue
+
+        if not isinstance(data, dict):
+            continue
+
+        file_call_id = data.get("call_id")
+        if isinstance(file_call_id, str) and file_call_id.upper() == call_id.upper():
+            return data      
+
+    return None
+
+

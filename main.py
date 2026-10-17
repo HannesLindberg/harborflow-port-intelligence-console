@@ -421,5 +421,39 @@ def classify_shipment(shipment):
         return "EXPEDITE", "heavy cargo"
     return "STANDARD", "standard handling"
 
+#Task 7
+
+from text_tools import longest_stable_sequence
+from data_access import find_manifest
+# TODO (Task 3 needed): from data_access import call_exists
+
+
+def run_event_sequence():
+    call_id = input("Call ID: ").strip()   # TODO: confirm prompt text with the team / teacher
+
+    # TODO (Task 3 needed): enable this once call_exists() exists in data_access.py
+    # if not call_exists(call_id):
+    #     print("Port call not found.")
+    #     return
+
+    manifest = find_manifest(call_id)
+    if manifest is None:
+        print("Manifest unavailable.")
+        return
+
+    event_codes = manifest.get("event_codes")
+    if not isinstance(event_codes, list) or not all(isinstance(e, str) for e in event_codes):
+        print("Manifest unavailable.")
+        return
+
+    sequence = longest_stable_sequence(event_codes)
+
+    print("Event codes: " + ",".join(event_codes))
+    print("Longest stable sequence length: " + str(len(sequence)))
+    print("Sequence: " + " -> ".join(sequence))
+
+
+
+
 if __name__ == "__main__":
     main()
