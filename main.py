@@ -429,7 +429,7 @@ from data_access import find_manifest
 
 
 def run_event_sequence():
-    call_id = input("Call ID: ").strip()   # TODO: confirm prompt text with the team / teacher
+    call_id = input("Call ID: ").strip()
 
     # TODO (Task 3 needed): enable this once call_exists() exists in data_access.py
     # if not call_exists(call_id):
