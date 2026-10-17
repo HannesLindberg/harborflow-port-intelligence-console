@@ -453,6 +453,58 @@ def run_event_sequence():
     print("Sequence: " + " -> ".join(sequence))
 
 
+#task 8
+
+from operations import (
+    find_vessel_by_name,
+    ask_valid_date,
+    find_upcoming_calls,
+    build_forecast_lookup,
+    read_forecast,
+    print_forecast,
+)
+
+def run_weather_risk():
+    # TODO: temporary. list_registerd_vessels() also prints the vessel list.
+    #       Replace with load_vessels() (returns the list without printing) once Task 1 splits it.
+    vessels = list_registerd_vessels()
+
+    name = input("Vessel name: ")
+    vessel = find_vessel_by_name(name, vessels)
+    if vessel is None:
+        print("Vessel not found.")
+        return
+
+    reference_date = ask_valid_date()
+
+    calls = load_csv("dataset/port_calls.csv")
+    upcoming = find_upcoming_calls(calls, vessel["vessel_id"], reference_date)
+    if not upcoming:
+        print("No upcoming port calls found.")
+        return
+
+    upcoming.sort(key=lambda row: (row["arrival_date"], row["call_id"]))
+
+    lookup = build_forecast_lookup(load_csv("dataset/weather.csv"))
+
+    for call in upcoming:
+        arrival = datetime.date.fromisoformat(call["arrival_date"])
+        port = call["port_code"]
+
+        forecast_row = lookup.get((port, call["arrival_date"]))
+        if forecast_row is None:
+            print(f"{vessel['name']} | {port} | {arrival.strftime('%d %B %Y')}")
+            print("Forecast unavailable")
+            continue
+
+        values = read_forecast(forecast_row)
+        if values is None:
+            continue
+
+        wind, rain, waves = values
+        print_forecast(vessel["name"], port, arrival, wind, rain, waves)
+
+
 
 
 if __name__ == "__main__":
