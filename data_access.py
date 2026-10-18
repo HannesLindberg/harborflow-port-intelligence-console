@@ -42,3 +42,52 @@ def find_manifest(call_id):
     return None
 
 
+
+
+def load_incidents(directory="dataset/incidents"):
+    """Return a list of valid incident dicts. Skip malformed files."""
+    incidents = []
+    required = ["incident_id", "call_id", "title", "report"]
+    for path in Path(directory).glob("*.json"):
+        try:
+            data = load_json(path)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(data, dict):
+            continue
+        if not all(field in data for field in required):
+            continue
+        if not isinstance(data["report"], str):
+            continue
+        incidents.append(data)
+    return incidents
+
+
+
+def save_index(index, titles, path="dataset/incident-index.json"):
+    for word in index:
+        index[word].sort()
+    data = {"index": index, "titles": titles}
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, sort_keys=True)
+
+
+
+
+def load_cached_index(path="dataset/incident-index.json",
+                      incidents_dir="dataset/incidents"):
+    """Return (index, titles) from the cache, or None if it must be rebuilt."""
+    try:
+        cache_time = Path(path).stat().st_mtime
+        data = load_json(path)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+    if not isinstance(data, dict) or "index" not in data or "titles" not in data:
+        return None
+
+    for incident_path in Path(incidents_dir).glob("*.json"):
+        if incident_path.stat().st_mtime > cache_time:
+            return None
+
+    return data["index"], data["titles"]
