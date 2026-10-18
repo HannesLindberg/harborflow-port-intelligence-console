@@ -12,6 +12,11 @@ Contribution:
 - GitHub initiation
 - Task 0
 
+Name: Hugo Karlsson
+Contribution:
+-Taks 1 and 2
+
+
 Name:
 Contribution:
 
