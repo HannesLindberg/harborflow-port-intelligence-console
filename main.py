@@ -423,20 +423,17 @@ def classify_shipment(shipment):
         return "EXPEDITE", "heavy cargo"
     return "STANDARD", "standard handling"
 
-#Task 7
-
+# Task 7
 from text_tools import longest_stable_sequence
-from data_access import find_manifest
-# TODO (Task 3 needed): from data_access import call_exists
+from data_access import find_manifest, call_exists
 
 
 def run_event_sequence():
     call_id = input("Call ID: ").strip()
 
-    # TODO (Task 3 needed): enable this once call_exists() exists in data_access.py
-    # if not call_exists(call_id):
-    #     print("Port call not found.")
-    #     return
+    if not call_exists(call_id):
+        print("Port call not found.")
+        return
 
     manifest = find_manifest(call_id)
     if manifest is None:
@@ -469,6 +466,7 @@ from operations import (
 def run_weather_risk():
     # TODO: temporary. list_registerd_vessels() also prints the vessel list.
     #       Replace with load_vessels() (returns the list without printing) once Task 1 splits it.
+    #I will explain in meeting.
     vessels = list_registerd_vessels()
 
     name = input("Vessel name: ")

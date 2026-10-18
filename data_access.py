@@ -92,8 +92,15 @@ def load_cached_index(path="dataset/incident-index.json",
 
     return data["index"], data["titles"]
 
-#BUG: load_cached_index() returns None even after save_index()
-#Where: data_access.py
-#Seen: running test.py in the separate test folder
-#To check: does dataset/incident-index.json exist? which DEBUG branch returns None?
 
+
+
+#for task 7
+
+def call_exists(call_id):
+    rows = load_csv("dataset/port_calls.csv")
+    call_id = call_id.strip().lower()
+    for row in rows:
+        if row.get("call_id", "").strip().lower() == call_id:
+            return True
+    return False
