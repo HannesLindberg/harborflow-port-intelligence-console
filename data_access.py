@@ -97,6 +97,3 @@ def load_cached_index(path="dataset/incident-index.json",
 #Seen: running test.py in the separate test folder
 #To check: does dataset/incident-index.json exist? which DEBUG branch returns None?
 
-
-if __name__ == "__main__":
-    print(load_cached_index() is None)
