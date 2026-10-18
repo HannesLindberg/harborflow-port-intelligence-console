@@ -47,3 +47,21 @@ def build_index(incidents):
     return index, titles
 
 
+
+
+def search_incidents(query, index, titles):
+    """Return a list of (incident_id, score, title), best match first."""
+    scores = {}
+    words = set(normalize_text(query))
+    for word in words:
+        if word in index:
+            for incident_id in index[word]:
+                scores[incident_id] = scores.get(incident_id, 0) + 1
+    pairs = list(scores.items())
+    pairs.sort(key=lambda pair: (-pair[1], pair[0]))
+    results = []
+    for incident_id, score, in pairs:
+        results.append((incident_id, score, titles[incident_id]))
+    return results
+
+

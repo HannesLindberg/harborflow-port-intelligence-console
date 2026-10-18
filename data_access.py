@@ -91,3 +91,10 @@ def load_cached_index(path="dataset/incident-index.json",
             return None
 
     return data["index"], data["titles"]
+
+#BUG: load_cached_index() returns None even after save_index()
+#Where: data_access.py
+#Seen: running test.py in the separate test folder
+#To check: does dataset/incident-index.json exist? which DEBUG branch returns None?
+
+

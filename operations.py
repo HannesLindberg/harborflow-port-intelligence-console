@@ -83,3 +83,20 @@ def print_forecast(vessel_name, port_code, arrival, wind, rain, waves):
     print(f"Recommendation: {' '.join(recommendations)}")
 
 
+
+
+from data_access import load_cached_index, load_incidents, save_index
+from text_tools import build_index
+
+
+def get_incident_index():
+    cached = load_cached_index()
+    if cached is not None:
+        return cached
+
+    incidents = load_incidents()
+    index, titles = build_index(incidents)
+    save_index(index, titles)
+    return index, titles
+
+

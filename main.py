@@ -7,6 +7,8 @@ import csv
 import datetime
 from pathlib import Path
 import re
+from operations import get_incident_index, run_weather_risk
+from text_tools import longest_stable_sequence
 
 def get_number(prompt, error_message="Invalid input", cast=float, min_value=0, max_value=math.inf):
     """Keep asking until the user enters something that converts with `cast`
@@ -361,11 +363,11 @@ def main():
                 else:
                     save_sanitized_report(incident["incident_id"], clean_text)
             case 7:
-                pass
+                run_event_sequence()
             case 8:
-                pass
+                run_weather_risk()
             case 9:
-                pass
+                run_incident_search()
             case 10:
                 print("Console closed. Dispatch data remains safe.")
                 run = False
@@ -504,6 +506,19 @@ def run_weather_risk():
         wind, rain, waves = values
         print_forecast(vessel["name"], port, arrival, wind, rain, waves)
 
+
+from operations import get_incident_index
+from text_tools import search_incidents
+
+
+def run_incident_search():
+    index, titles = get_incident_index()
+    query = input("Search incident reports: ")
+    results = search_incidents(query, index, titles)
+
+    print(f"Matches for '{query}':")
+    for incident_id, score, title in results:
+        print(f"- {incident_id} | score {score} | {title}")
 
 
 
