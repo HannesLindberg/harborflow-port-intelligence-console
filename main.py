@@ -7,7 +7,7 @@ import csv
 import datetime
 from pathlib import Path
 import re
-from operations import get_incident_index, run_weather_risk
+from operations import get_incident_index
 from text_tools import longest_stable_sequence
 
 def get_number(prompt, error_message="Invalid input", cast=float, min_value=0, max_value=math.inf):
@@ -507,6 +507,8 @@ def run_weather_risk():
         print_forecast(vessel["name"], port, arrival, wind, rain, waves)
 
 
+
+#task 9
 from operations import get_incident_index
 from text_tools import search_incidents
 
