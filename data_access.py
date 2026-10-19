@@ -104,3 +104,22 @@ def call_exists(call_id):
         if row.get("call_id", "").strip().lower() == call_id:
             return True
     return False
+
+
+def search_file_from_row(file_path, row, value):
+    """Looks through a JSON-file, checks if there is a match (case insensitive) for a certain row
+    ARGUMENTS:
+    file_path (string): the file that is being searched.
+    row (string): the row that is being matched.
+    value (veries depending on what your matching): the search string.
+
+    RETURNS: 
+    match (boolean): True if there is a match and False if there is no match.
+    """
+    file = load_json(file_path) 
+    if isinstance(file, str): file.lower()
+
+    if file[row] == value:
+        return file_path
+
+    return False
