@@ -197,12 +197,6 @@ def Inspect_a_vessel_manifest(valid_vessels):
 
 
 #Task 5
-#Reads CSV file and returns rows as a list of dict
-def load_csv(path):
-    with open(path, "r", newline="") as file:
-        reader = csv.DictReader(file)
-        rows = list(reader)
-        return rows
 
 #builds a dict from vessel ID to vessel names, skips broken files    
 def load_vessel_names():
@@ -235,7 +229,7 @@ def ask_month():
 #Need to import date from datetime to check invalid dates
 #date.fromisoformat makes the date of format YYYY-MM-DD
 def find_port_calls_by_month(month, vessel_names):
-    port_calls = load_csv("dataset/port_calls.csv")
+    port_calls = data_access.load_csv("dataset/port_calls.csv")
     calls = []
     for row in port_calls:
         try:
