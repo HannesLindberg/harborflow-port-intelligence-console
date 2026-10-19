@@ -14,11 +14,12 @@ Contribution:
 
 Name: Hugo Karlsson
 Contribution:
--Taks 1 and 2
+- Tasks 1 and 2
 
 
-Name:
+Name: Brian Rauch
 Contribution:
+- Task 5 and Task 6
 
 Name:
 Contribution:
