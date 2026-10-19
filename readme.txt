@@ -11,6 +11,8 @@ Name: Hannes Lindberg
 Contribution:
 - GitHub initiation
 - Task 0
+- Task 3
+- Task 4
 
 Name: Hugo Karlsson
 Contribution:
