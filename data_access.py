@@ -92,11 +92,7 @@ def load_cached_index(path="dataset/incident-index.json",
 
     return data["index"], data["titles"]
 
-
-
-
 #for task 7
-
 def call_exists(call_id):
     rows = load_csv("dataset/port_calls.csv")
     call_id = call_id.strip().lower()
@@ -104,7 +100,6 @@ def call_exists(call_id):
         if row.get("call_id", "").strip().lower() == call_id:
             return True
     return False
-
 
 def search_file_from_row(file_path, row, value):
     """Looks through a JSON-file, checks if there is a match (case insensitive) for a certain row
@@ -121,5 +116,14 @@ def search_file_from_row(file_path, row, value):
 
     if file[row] == value:
         return file_path
+
+    return False
+
+def csv_row_exist(file_path, pk, query):
+    data = load_csv(file_path)
+
+    for row in data:
+        if row[pk] == query.strip().lower():
+            return file_path
 
     return False
