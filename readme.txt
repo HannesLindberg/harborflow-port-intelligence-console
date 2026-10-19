@@ -40,5 +40,6 @@ How malformed or missing input is handled:
 How generated files are updated safely:
 
 Known limitations
+task 1 must be run before task 2.
 -----------------
 Write "None known" or describe each known limitation.
