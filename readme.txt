@@ -17,8 +17,11 @@ Contribution:
 -Taks 1 and 2
 
 
-Name:
+Name: Aytunch Tuzdzhu
 Contribution:
+- Task 7
+- Task 8
+- Task 9
 
 Name:
 Contribution:

@@ -464,9 +464,7 @@ from operations import (
 )
 
 def run_weather_risk():
-    # TODO: temporary. list_registerd_vessels() also prints the vessel list.
-    #       Replace with load_vessels() (returns the list without printing) once Task 1 splits it.
-    #I will explain in meeting.
+    
     vessels = list_registerd_vessels()
 
     name = input("Vessel name: ")
@@ -516,6 +514,10 @@ def run_incident_search():
     query = input("Search incident reports: ")
     results = search_incidents(query, index, titles)
 
+    if not results:
+        print(f"No matches found for '{query}'")
+        return
+    
     print(f"Matches for '{query}':")
     for incident_id, score, title in results:
         print(f"- {incident_id} | score {score} | {title}")
