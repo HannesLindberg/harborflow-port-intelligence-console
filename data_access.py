@@ -24,8 +24,10 @@ def load_csv(file_path):
 
 
 
-
+#for task 7
 def find_manifest(call_id):
+    #loops over dataset/manifests/*.json, skips malformed files, 
+    # and returns the manifest whose call_id field matches (case-insensitive)
     for path in Path("dataset/manifests").glob("*.json"):
         try: 
             data = load_json(path)
@@ -43,9 +45,9 @@ def find_manifest(call_id):
 
 
 
-
+#for task 9
 def load_incidents(directory="dataset/incidents"):
-    """Return a list of valid incident dicts. Skip malformed files."""
+    #reads valid incident JSON files and skips malformed ones.
     incidents = []
     required = ["incident_id", "call_id", "title", "report"]
     for path in Path(directory).glob("*.json"):
@@ -63,8 +65,9 @@ def load_incidents(directory="dataset/incidents"):
     return incidents
 
 
-
+#for task 9
 def save_index(index, titles, path="dataset/incident-index.json"):
+    #writes both to dataset/incident-index.json with sorted keys and sorted ID lists.
     for word in index:
         index[word].sort()
     data = {"index": index, "titles": titles}
@@ -73,10 +76,11 @@ def save_index(index, titles, path="dataset/incident-index.json"):
 
 
 
-
+#for task 9
 def load_cached_index(path="dataset/incident-index.json",
                       incidents_dir="dataset/incidents"):
-    """Return (index, titles) from the cache, or None if it must be rebuilt."""
+    #returns the cache only if the file exists, 
+    #is valid JSON with index and titles, and is newer than every incident file.
     try:
         cache_time = Path(path).stat().st_mtime
         data = load_json(path)
@@ -96,8 +100,8 @@ def load_cached_index(path="dataset/incident-index.json",
 
 
 #for task 7
-
 def call_exists(call_id):
+    #Checks port_calls.csv for the call.
     rows = load_csv("dataset/port_calls.csv")
     call_id = call_id.strip().lower()
     for row in rows:

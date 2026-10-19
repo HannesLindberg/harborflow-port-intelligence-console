@@ -16,7 +16,8 @@ Contribution:
 
 Name: Hugo Karlsson
 Contribution:
--Taks 1 and 2
+- Task 1
+- Task 2
 
 
 Name: Aytunch Tuzdzhu

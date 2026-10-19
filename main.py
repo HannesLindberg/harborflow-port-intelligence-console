@@ -429,6 +429,7 @@ from data_access import find_manifest, call_exists
 
 
 def run_event_sequence():
+    #asks for a call ID.
     call_id = input("Call ID: ").strip()
 
     if not call_exists(call_id):
@@ -464,7 +465,7 @@ from operations import (
 )
 
 def run_weather_risk():
-    
+    #ties functions together. Calls are sorted by date and then call_id.
     vessels = list_registerd_vessels()
 
     name = input("Vessel name: ")
@@ -510,6 +511,7 @@ from text_tools import search_incidents
 
 
 def run_incident_search():
+    #asks for the query and prints Matches for '<query>':, then one line per match.
     index, titles = get_incident_index()
     query = input("Search incident reports: ")
     results = search_incidents(query, index, titles)
