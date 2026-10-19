@@ -4,6 +4,7 @@ Create reusable JSON and CSV loaders here. Do not hard-code sample records.
 """
 import json
 import csv
+import os
 from pathlib import Path
 
 
@@ -119,11 +120,30 @@ def search_file_from_row(file_path, row, value):
 
     return False
 
-def csv_row_exist(file_path, pk, query):
-    data = load_csv(file_path)
+def upsert_row(file_path, pk, new_row, fieldnames):
+    """Replace the row whose `pk` matches new_row[pk], or append it if none does.
+    Creates the file with a header if it doesn't exist."""
+    rows = []
+    replaced = False
+    key = str(new_row[pk]).strip().lower()
 
-    for row in data:
-        if row[pk] == query.strip().lower():
-            return file_path
+    if os.path.exists(file_path):
+        with open(file_path, newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row[pk].strip().lower() == key:
+                    rows.append(new_row)  
+                    replaced = True
+                else:
+                    rows.append(row)
 
-    return False
+    if not replaced:
+        rows.append(new_row)
+
+    os.makedirs(os.path.dirname(file_path) or ".", exist_ok=True)
+    tmp_path = file_path + ".tmp"
+    with open(tmp_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    os.replace(tmp_path, file_path)
