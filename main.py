@@ -68,7 +68,7 @@ def list_registerd_vessels():
     print(f"Skipped vessel files: {skipped_count}")
     return valid_vessels
 
-#task 2 helper funktion
+#task 2 helper function
 def validate_date(date_time):
     try:
         datetime.date.fromisoformat(date_time)
@@ -371,7 +371,7 @@ def identify_priority_cargo():
 
     call_id = input("Call id: ").strip().lower()
 
-    calls = load_csv("dataset/port_calls.csv")
+    calls = data_access.load_csv("dataset/port_calls.csv")
     call = next((c for c in calls if c["call_id"].strip().lower() == call_id), None)
 
     if call is None:
@@ -471,7 +471,7 @@ def run_weather_risk():
 
     reference_date = ask_valid_date()
 
-    calls = load_csv("dataset/port_calls.csv")
+    calls = data_access.load_csv("dataset/port_calls.csv")
     upcoming = find_upcoming_calls(calls, vessel["vessel_id"], reference_date)
     if not upcoming:
         print("No upcoming port calls found.")
@@ -479,7 +479,7 @@ def run_weather_risk():
 
     upcoming.sort(key=lambda row: (row["arrival_date"], row["call_id"]))
 
-    lookup = build_forecast_lookup(load_csv("dataset/weather.csv"))
+    lookup = build_forecast_lookup(data_access.load_cached_index(data_access.load_csv("dataset/weather.csv")))
 
     for call in upcoming:
         arrival = datetime.date.fromisoformat(call["arrival_date"])
