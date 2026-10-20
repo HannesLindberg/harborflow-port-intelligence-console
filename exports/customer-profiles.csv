@@ -1,0 +1,3 @@
+customer,shipment_count,weight_kg,express_count,destinations
+Norra MedTech AB,8,400.00,3,GOT|CPH|OSL
+Vänern Tools AB,2,620.00,1,OSL|AAR

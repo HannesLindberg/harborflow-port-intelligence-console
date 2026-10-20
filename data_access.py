@@ -4,6 +4,7 @@ Create reusable JSON and CSV loaders here. Do not hard-code sample records.
 """
 import json
 import csv
+import os
 from pathlib import Path
 
 
@@ -96,9 +97,6 @@ def load_cached_index(path="dataset/incident-index.json",
 
     return data["index"], data["titles"]
 
-
-
-
 #for task 7
 def call_exists(call_id):
     #Checks port_calls.csv for the call.
@@ -108,3 +106,49 @@ def call_exists(call_id):
         if row.get("call_id", "").strip().lower() == call_id:
             return True
     return False
+
+def search_file_from_row(file_path, row, value):
+    """Looks through a JSON-file, checks if there is a match (case insensitive) for a certain row
+    ARGUMENTS:
+    file_path (string): the file that is being searched.
+    row (string): the row that is being matched.
+    value (veries depending on what your matching): the search string.
+
+    RETURNS: 
+    match (boolean): True if there is a match and False if there is no match.
+    """
+    file = load_json(file_path) 
+    if isinstance(file, str): file.lower()
+
+    if file[row] == value:
+        return file_path
+
+    return False
+
+def upsert_row(file_path, pk, new_row, fieldnames):
+    """Replace the row whose `pk` matches new_row[pk], or append it if none does.
+    Creates the file with a header if it doesn't exist."""
+    rows = []
+    replaced = False
+    key = str(new_row[pk]).strip().lower()
+
+    if os.path.exists(file_path):
+        with open(file_path, newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                if row[pk].strip().lower() == key:
+                    rows.append(new_row)  
+                    replaced = True
+                else:
+                    rows.append(row)
+
+    if not replaced:
+        rows.append(new_row)
+
+    os.makedirs(os.path.dirname(file_path) or ".", exist_ok=True)
+    tmp_path = file_path + ".tmp"
+    with open(tmp_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    os.replace(tmp_path, file_path)
