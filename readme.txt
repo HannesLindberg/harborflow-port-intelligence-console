@@ -3,7 +3,7 @@ HARBORFLOW PORT INTELLIGENCE CONSOLE - TEAM README
 Run instructions
 ----------------
 Command:
-Python version tested:
+Python version tested: Python 3.13.14
 
 Team members and concrete contributions
 ---------------------------------------
@@ -32,26 +32,31 @@ Contribution:
 - Task 8
 - Task 9
 
-Name:
-Contribution:
-
-Name (if applicable):
-Contribution:
-
 Architecture
 ------------
-main.py responsibilities:
-data_access.py responsibilities:
-operations.py responsibilities:
-text_tools.py responsibilities:
+main.py responsibilities: Menu loop and orchestration.
+data_access.py responsibilities: All file access.
+operations.py responsibilities: Business logic.
+text_tools.py responsibilities: Text and sequence algorithms.
 
 File and error-handling design
 ------------------------------
 How paths are resolved:
+- All paths are relative to the project root
+- pathlib.Path is used to find files with glob("*.json")
+
 How malformed or missing input is handled:
+- Expected problems are caught where a useful response is possible: json.JSONDecodeError, FileNotFoundError and ValueError.
+- A bad file or row is skipped without stopping later valid records.
+- User input is checked in loops that repeat only the failing prompt.
+
 How generated files are updated safely:
+- The incident index is written with json.dump with sorted keys and sorted ID lists.
+- It is reused only if it exists, is valid JSON with the keys "index" and "titles", and is newer than every incident file.
+- Otherwise it is rebuilt and saved again.
+- A corrupt cache repairs itself.
 
 Known limitations
-task 1 must be run before task 2.
------------------
-Write "None known" or describe each known limitation.
+- Task 1 must be run before task 2.
+- Task 9 indexes every word, such as "a" or "gate".
+
