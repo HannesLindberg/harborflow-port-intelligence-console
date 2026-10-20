@@ -3,7 +3,9 @@
 import re
 
 
+    #for task 7
 def longest_stable_sequence(events):
+    #Finds the longest run of consecutive events with no repeated code, using a sliding window.
     start = 0
     last_seen = {}
     best_start = 0
@@ -23,15 +25,17 @@ def longest_stable_sequence(events):
     return events[best_start:best_start + best_length]
 
 
-
+#for task 9
 def normalize_text(text):
+    #owercases the text and extracts words with re.findall(r'[a-z0-9]+', ...).
     text = text.lower()
     words = re.findall(r'[a-z0-9]+', text)
     return words
 
 
-
+#for task 9
 def build_index(incidents):
+    #builds an inverted index (word → sorted incident IDs, no duplicates) and a titles lookup (ID → title).
     """incidents: list of dicts with incident_id, title, report.
     Return (index, titles)."""
     index = {}
@@ -48,9 +52,10 @@ def build_index(incidents):
 
 
 
-
+#for task 9
 def search_incidents(query, index, titles):
-    """Return a list of (incident_id, score, title), best match first."""
+#scores each incident by the number of distinct query words it contains.
+# Results are sorted by score (descending) and then by ID.
     scores = {}
     words = set(normalize_text(query))
     for word in words:

@@ -11,6 +11,8 @@ Name: Hannes Lindberg
 Contribution:
 - GitHub initiation
 - Task 0
+- Task 3
+- Task 4
 
 Name: Hugo Karlsson
 Contribution:
@@ -20,6 +22,15 @@ Contribution:
 Name: Brian Rauch
 Contribution:
 - Task 5 and Task 6
+- Task 1
+- Task 2
+
+
+Name: Aytunch Tuzdzhu
+Contribution:
+- Task 7
+- Task 8
+- Task 9
 
 Name:
 Contribution:
@@ -41,5 +52,6 @@ How malformed or missing input is handled:
 How generated files are updated safely:
 
 Known limitations
+task 1 must be run before task 2.
 -----------------
 Write "None known" or describe each known limitation.

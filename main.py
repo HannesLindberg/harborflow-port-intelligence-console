@@ -338,7 +338,8 @@ def main():
             case 3:
                 identify_priority_cargo()
             case 4:
-                pass
+                name = input("Customer name: ")
+                export_profile(name)
             case 5:
                 month = ask_month()
                 vessel_names = load_vessel_names()
@@ -367,7 +368,7 @@ def main():
                 run = False
 
 def identify_priority_cargo():
-    """Takes a port call and identifies the priority shipment catefories for each shipment"""
+    """Takes a port call and identifies the priority shipment categories for each shipment"""
 
     call_id = input("Call id: ").strip().lower()
 
@@ -417,12 +418,43 @@ def classify_shipment(shipment):
         return "EXPEDITE", "heavy cargo"
     return "STANDARD", "standard handling"
 
+def export_profile(name):
+    """Takes a name of a customer and updates esports/customer-profiles.csv"""
+    count = 0
+    express = 0
+    regions = []
+    
+    for file_path in Path("dataset/shipments").glob("*.json"):
+        if data_access.search_file_from_row(file_path, "customer", name):
+            file = data_access.load_json(file_path)
+
+            count += 1
+            total_weight = file["weight_kg"]
+            if file["priority"] == "EXPRESS": express += 1
+            if file["destination"] not in regions: regions.append(file["destination"])
+
+    if count == 0:
+        print("Customer not found")
+        return
+
+    FIELDS = ["customer", "shipment_count", "weight_kg", "express_count", "destinations"]
+
+    profile = {
+        "customer": name,
+        "shipment_count": count,
+        "weight_kg": f"{total_weight:.2f}",
+        "express_count": express,
+        "destinations": "|".join(regions),
+    }
+    data_access.upsert_row("exports/customer-profiles.csv", "customer", profile, FIELDS)
+
 # Task 7
 from text_tools import longest_stable_sequence
 from data_access import find_manifest, call_exists
 
 
 def run_event_sequence():
+    #asks for a call ID.
     call_id = input("Call ID: ").strip()
 
     if not call_exists(call_id):
@@ -458,9 +490,7 @@ from operations import (
 )
 
 def run_weather_risk():
-    # TODO: temporary. list_registerd_vessels() also prints the vessel list.
-    #       Replace with load_vessels() (returns the list without printing) once Task 1 splits it.
-    #I will explain in meeting.
+    #ties functions together. Calls are sorted by date and then call_id.
     vessels = list_registerd_vessels()
 
     name = input("Vessel name: ")
@@ -506,10 +536,15 @@ from text_tools import search_incidents
 
 
 def run_incident_search():
+    #asks for the query and prints Matches for '<query>':, then one line per match.
     index, titles = get_incident_index()
     query = input("Search incident reports: ")
     results = search_incidents(query, index, titles)
 
+    if not results:
+        print(f"No matches found for '{query}'")
+        return
+    
     print(f"Matches for '{query}':")
     for incident_id, score, title in results:
         print(f"- {incident_id} | score {score} | {title}")
