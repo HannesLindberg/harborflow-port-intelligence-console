@@ -2,7 +2,7 @@ HARBORFLOW PORT INTELLIGENCE CONSOLE - TEAM README
 
 Run instructions
 ----------------
-Command:
+Command: python3 main.py
 Python version tested: Python 3.13.14
 
 Team members and concrete contributions
