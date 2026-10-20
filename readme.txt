@@ -16,14 +16,14 @@ Contribution:
 
 Name: Hugo Karlsson
 Contribution:
-- Tasks 1 and 2
+- Tasks 1 
+- Task 2
 
 
 Name: Brian Rauch
 Contribution:
 - Task 5 and Task 6
-- Task 1
-- Task 2
+
 
 
 Name: Aytunch Tuzdzhu
