@@ -509,7 +509,7 @@ def run_weather_risk():
 
     upcoming.sort(key=lambda row: (row["arrival_date"], row["call_id"]))
 
-    lookup = build_forecast_lookup(data_access.load_cached_index(data_access.load_csv("dataset/weather.csv")))
+    lookup = build_forecast_lookup(data_access.load_csv("dataset/weather.csv"))
 
     for call in upcoming:
         arrival = datetime.date.fromisoformat(call["arrival_date"])
